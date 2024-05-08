@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 veri =pd.read_csv("hayvanatbahcesi.csv",encoding='unicode_escape')
 
-girisler=np.array(veri.drop(["sinifi"],axis=1))
+girisler=np.array(veri.drop(["hayvan adi", "sinifi"],axis=1))
 cikis=np.array(veri["sinifi"])
 
 from sklearn.model_selection import train_test_split
