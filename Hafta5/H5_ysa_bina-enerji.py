@@ -1,11 +1,8 @@
-from keras.models import Sequential
-from keras.layers import Dense
-from tensorflow.keras.layers import Dense, Input, Dropout
+from keras.layers import Dense, Input, Dropout
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
-from sklearn import metrics 
 from sklearn.preprocessing import StandardScaler
 from tensorflow.keras.models import Model
 import tensorflow as tf
@@ -14,7 +11,7 @@ from keras.callbacks import EarlyStopping
 dataset = pd.read_excel('ENB2012_data.xlsx')
 dataset=dataset.values
 X=dataset[:,0:8]
-y =dataset[:,8:10]
+y=dataset[:,8:10]
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
 
@@ -28,15 +25,17 @@ data_x_train_scaled, data_x_test_scaled, data_y_train, data_y_test = \
 
 data_y_train = (data_y_train[:, 0], data_y_train[:, 1])
 
-input_layer = Input(shape=(data_x_train_scaled.shape[1]), name='Input_Layer')
-common_path = Dense(units='128', activation='relu', name='First_Dense')(input_layer)
+input_dim = data_x_train_scaled.shape[1]  # Get the number of features
+input_layer = Input(shape=(input_dim,), name='Input_Layer')
+
+common_path = Dense(units=128, activation='relu', name='First_Dense')(input_layer)
 common_path = Dropout(0.3)(common_path)
-common_path = Dense(units='128', activation='relu', name='Second_Dense')(common_path)
+common_path = Dense(units=128, activation='relu', name='Second_Dense')(common_path)
 common_path = Dropout(0.3)(common_path)
-first_output = Dense(units='1', name='First_Output__Last_Layer')(common_path)
-second_output_path = Dense(units='64', activation='relu', name='Second_Output__First_Dense')(common_path)
+first_output = Dense(units=1, name='First_Output__Last_Layer')(common_path)
+second_output_path = Dense(units=64, activation='relu', name='Second_Output__First_Dense')(common_path)
 second_output_path = Dropout(0.3)(second_output_path)
-second_output = Dense(units='1', name='Second_Output__Last_Layer')(second_output_path)
+second_output = Dense(units=1, name='Second_Output__Last_Layer')(second_output_path)
 
 model = Model(inputs=input_layer, outputs=[first_output, second_output])
 print(model.summary())
